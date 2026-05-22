@@ -1029,8 +1029,8 @@ function renderSendPage(baseUrl, files) {
       </header>
 
       <nav class="mobile-switcher" aria-label="Cambiar pantalla">
-        <a class="mobile-switcher-link" href="${baseUrl}/receive">Recibir</a>
-        <a class="mobile-switcher-link is-active" href="${baseUrl}/send" aria-current="page">Enviar</a>
+        <a class="mobile-switcher-link" href="${baseUrl}/receive">Enviar</a>
+        <a class="mobile-switcher-link is-active" href="${baseUrl}/send" aria-current="page">Recibir</a>
       </nav>
 
       <div class="card-body">
