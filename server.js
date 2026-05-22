@@ -200,6 +200,39 @@ function renderReceivePage(baseUrl) {
         flex-shrink: 0;
       }
 
+      .mobile-switcher {
+        display: flex;
+        gap: 8px;
+        margin: 16px 24px 0;
+        padding: 8px;
+        border-radius: 18px;
+        background: rgba(58, 171, 92, 0.06);
+        border: 1px solid var(--bd);
+      }
+
+      .mobile-switcher-link {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 14px;
+        border-radius: 14px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--tx2);
+        text-decoration: none;
+        font-family: 'DM Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .mobile-switcher-link.is-active {
+        background: rgba(58, 171, 92, 0.16);
+        border-color: var(--bd2);
+        color: var(--tx);
+      }
+
       .status-dot {
         width: 6px;
         height: 6px;
@@ -475,6 +508,11 @@ function renderReceivePage(baseUrl) {
           Activo
         </div>
       </header>
+
+      <nav class="mobile-switcher" aria-label="Cambiar pantalla">
+        <a class="mobile-switcher-link is-active" href="${baseUrl}/receive" aria-current="page">Enviar</a>
+        <a class="mobile-switcher-link" href="${baseUrl}/send">Recibir</a>
+      </nav>
 
       <div class="card-body">
 
@@ -791,6 +829,35 @@ function renderSendPage(baseUrl, files) {
         flex-shrink: 0;
       }
 
+      .mobile-switcher {
+        display: flex;
+        gap: 8px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mobile-switcher-link {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--panel);
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .mobile-switcher-link.is-active {
+        color: white;
+        border-color: rgba(110, 231, 255, 0.28);
+        background: linear-gradient(135deg, rgba(110, 231, 255, 0.16), rgba(139, 92, 246, 0.16));
+      }
+
       .status-dot {
         width: 6px;
         height: 6px;
@@ -960,6 +1027,11 @@ function renderSendPage(baseUrl, files) {
           Activo
         </div>
       </header>
+
+      <nav class="mobile-switcher" aria-label="Cambiar pantalla">
+        <a class="mobile-switcher-link" href="${baseUrl}/receive">Recibir</a>
+        <a class="mobile-switcher-link is-active" href="${baseUrl}/send" aria-current="page">Enviar</a>
+      </nav>
 
       <div class="card-body">
 
