@@ -1,0 +1,25 @@
+{
+  "name": "libredrop",
+  "version": "0.1.0",
+  "description": "MVP de transferencia local de archivos con Electron y Express",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "express",
+    "file-transfer",
+    "qrcode"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "electron": "^39.8.1",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "qrcode": "^1.5.4"
+  }
+}

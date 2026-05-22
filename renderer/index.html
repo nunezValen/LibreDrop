@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LibreDrop</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">LibreDrop MVP</p>
+          <h1>Archivo local, sin nube.</h1>
+          <p class="lead">Escaneá el QR desde el celular para abrir el servidor de transferencia en la red local.</p>
+        </div>
+        <div class="status-pill" id="status-pill">Iniciando...</div>
+      </header>
+
+      <main class="grid">
+        <section class="panel qr-panel">
+          <div class="panel-title">QR para abrir la página</div>
+          <div class="qr-frame">
+            <img id="qr-image" alt="QR de conexión" />
+          </div>
+          <div class="meta">
+            <span>IP</span>
+            <strong id="ip-value">-</strong>
+          </div>
+          <div class="meta">
+            <span>Puerto</span>
+            <strong id="port-value">-</strong>
+          </div>
+        </section>
+
+        <section class="panel info-panel">
+          <div class="panel-title">Estado del servidor</div>
+          <div class="terminal-card">
+            <div class="terminal-line" id="server-url">Esperando datos...</div>
+            <div class="terminal-line muted" id="upload-url">Escaneá el QR y se abrirá esta URL en el celular.</div>
+          </div>
+          <div class="steps">
+            <div class="step">1. Abrí la cámara del celular o un lector QR.</div>
+            <div class="step">2. Escaneá el código.</div>
+            <div class="step">3. Subí un archivo en la página que abre.</div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
