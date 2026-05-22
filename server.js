@@ -692,139 +692,293 @@ function renderSendPage(baseUrl, files) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LibreDrop - Enviar</title>
+    <title>LibreDrop — Enviar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
     <style>
       :root {
+        --bg:       #0b1a10;
+        --bg-2:     #0f2016;
+        --s1:       rgba(17, 34, 22, 0.92);
+        --s2:       rgba(22, 44, 28, 0.97);
+        --tx:       #e8f5ec;
+        --tx2:      #8db89a;
+        --tx3:      #527a5e;
+        --bd:       rgba(61, 138, 80, 0.18);
+        --bd2:      rgba(61, 138, 80, 0.32);
+        --ac:       #3aab5c;
+        --ac-glow:  rgba(58, 171, 92, 0.24);
+        --r-sm:     8px;
+        --r-md:     14px;
+        --r-lg:     20px;
+        --r-xl:     26px;
         color-scheme: dark;
-        --bg: #08111f;
-        --panel: #101a31;
-        --panel-2: #17213b;
-        --text: #f3f7ff;
-        --muted: #9aa8c7;
-        --accent: #6ee7ff;
-        --accent-2: #8b5cf6;
-        --border: rgba(255, 255, 255, 0.08);
       }
-      * { box-sizing: border-box; }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
       body {
-        margin: 0;
+        font-family: 'DM Sans', system-ui, sans-serif;
+        background: var(--bg);
+        background-image:
+          radial-gradient(ellipse 70% 40% at 50% 0%, rgba(58, 171, 92, 0.1) 0%, transparent 60%),
+          radial-gradient(ellipse 40% 30% at 90% 100%, rgba(34, 138, 66, 0.06) 0%, transparent 50%);
+        color: var(--tx);
         min-height: 100vh;
         display: grid;
         place-items: center;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        background:
-          radial-gradient(circle at top, rgba(110, 231, 255, 0.15), transparent 25%),
-          radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.16), transparent 30%),
-          var(--bg);
-        color: var(--text);
-        padding: 24px;
+        padding: 24px 16px;
       }
+
       .card {
-        width: min(680px, 100%);
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-        border: 1px solid var(--border);
-        border-radius: 24px;
-        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+        width: min(560px, 100%);
+        background: var(--s1);
+        border: 1px solid var(--bd);
+        border-radius: var(--r-xl);
         overflow: hidden;
       }
-      .hero {
-        padding: 24px 24px 18px;
-        background: linear-gradient(135deg, rgba(110, 231, 255, 0.12), rgba(139, 92, 246, 0.12));
-        border-bottom: 1px solid var(--border);
-      }
-      h1 {
-        margin: 0 0 8px;
-        font-size: 30px;
-        letter-spacing: -0.03em;
-      }
-      p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.5;
-      }
-      .content {
-        padding: 24px;
-        display: grid;
-        gap: 16px;
-      }
-      .box {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 16px;
-      }
-      .label {
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--muted);
-        margin-bottom: 8px;
-      }
-      .download-list {
-        display: grid;
-        gap: 12px;
-      }
-      .download-card {
+
+      /* Header */
+      .card-header {
+        padding: 20px 22px;
+        border-bottom: 1px solid var(--bd);
         display: flex;
-        justify-content: space-between;
         align-items: center;
         gap: 12px;
-        padding: 14px 16px;
-        border-radius: 16px;
-        background: var(--panel-2);
-        border: 1px solid var(--border);
       }
-      .download-name {
+
+      .logo-mark {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #196b33, #0b3319);
+        display: grid;
+        place-items: center;
+        color: #a8e0b7;
+        flex-shrink: 0;
+        box-shadow: 0 2px 14px rgba(58, 171, 92, 0.28);
+      }
+
+      .header-text h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: 18px;
         font-weight: 800;
-        word-break: break-word;
+        letter-spacing: -0.03em;
+        color: var(--tx);
+        line-height: 1;
       }
-      .download-meta {
-        margin-top: 4px;
-        color: var(--muted);
-        font-size: 13px;
+
+      .header-text p {
+        font-size: 12px;
+        color: var(--tx2);
+        margin-top: 3px;
+        line-height: 1.4;
       }
-      .download-button {
-        appearance: none;
-        border: 0;
-        border-radius: 14px;
-        padding: 12px 16px;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        color: white;
-        font-weight: 700;
-        text-decoration: none;
+
+      .status-badge {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        border-radius: 99px;
+        background: rgba(58, 171, 92, 0.1);
+        border: 1px solid var(--bd2);
+        font-size: 10px;
+        font-family: 'DM Mono', monospace;
+        color: #6dca87;
+        flex-shrink: 0;
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--ac);
+        box-shadow: 0 0 8px var(--ac);
+        animation: pulse 2.4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+
+      /* Body */
+      .card-body {
+        padding: 20px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      /* Section label */
+      .section-label {
+        font-family: 'DM Mono', monospace;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--tx3);
+        margin-bottom: 10px;
+      }
+
+      /* Download list */
+      .download-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .download-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 16px;
+        background: var(--s2);
+        border: 1px solid var(--bd);
+        border-radius: var(--r-lg);
+        transition: border-color 0.14s;
+      }
+
+      .download-card:hover {
+        border-color: var(--bd2);
+      }
+
+      .file-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: rgba(58, 171, 92, 0.1);
+        border: 1px solid var(--bd);
+        display: grid;
+        place-items: center;
+        color: var(--ac);
+        flex-shrink: 0;
+      }
+
+      .file-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .file-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--tx);
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
       }
-      .empty-state {
-        padding: 16px;
-        color: var(--muted);
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 16px;
+
+      .file-meta {
+        font-family: 'DM Mono', monospace;
+        font-size: 11px;
+        color: var(--tx3);
+        margin-top: 2px;
       }
-      .hint { font-size: 14px; color: var(--muted); }
-      @media (max-width: 640px) {
-        .download-card {
-          flex-direction: column;
-          align-items: stretch;
-        }
+
+      .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: 99px;
+        background: rgba(58, 171, 92, 0.1);
+        border: 1px solid var(--bd2);
+        color: #6dca87;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        font-family: 'DM Sans', sans-serif;
+        transition: all 0.14s ease;
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+
+      .download-btn:hover {
+        background: rgba(58, 171, 92, 0.2);
+        border-color: var(--ac);
+        color: #a8e0b7;
+      }
+
+      /* Empty state */
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 40px 24px;
+        background: var(--s2);
+        border: 1px solid var(--bd);
+        border-radius: var(--r-lg);
+        text-align: center;
+        color: var(--tx3);
+      }
+
+      .empty-state p { font-size: 14px; color: var(--tx2); }
+      .empty-state span { font-size: 12px; color: var(--tx3); }
+
+      /* Hint */
+      .note {
+        display: flex;
+        gap: 7px;
+        align-items: flex-start;
+        font-size: 12px;
+        color: var(--tx3);
+        line-height: 1.5;
+        padding: 9px 12px;
+        background: var(--s2);
+        border-radius: var(--r-sm);
+        border: 1px solid var(--bd);
+      }
+
+      .note svg { flex-shrink: 0; margin-top: 1px; }
+
+      @media (max-width: 480px) {
+        .download-card { flex-wrap: wrap; }
+        .download-btn { width: 100%; justify-content: center; }
       }
     </style>
   </head>
   <body>
     <main class="card">
-      <section class="hero">
-        <h1>LibreDrop</h1>
-        <p>Escaneá este QR para descargar archivos desde el celular.</p>
-      </section>
-      <section class="content">
-        <div class="box">
-          <div class="label">Descargas disponibles</div>
+
+      <header class="card-header">
+        <div class="logo-mark">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M9 2L15.5 5.5v7L9 16l-6.5-3.5v-7L9 2Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M9 5.5v5M6.5 7L9 5.5l2.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1>LibreDrop</h1>
+          <p>Descargá archivos desde el celular</p>
+        </div>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Activo
+        </div>
+      </header>
+
+      <div class="card-body">
+
+        <div>
+          <p class="section-label">Descargas disponibles</p>
           <div class="download-list">
             ${fileCards}
           </div>
         </div>
-        <div class="hint">Si no ves el archivo que buscás, refrescá esta página desde el celular.</div>
-      </section>
+
+        <div class="note">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6 5v3.5M6 3v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          Si no ves el archivo que buscás, refrescá esta página desde el celular.
+        </div>
+
+      </div>
     </main>
   </body>
 </html>`;
