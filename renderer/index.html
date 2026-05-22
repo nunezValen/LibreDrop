@@ -17,33 +17,63 @@
         <div class="status-pill" id="status-pill">Iniciando...</div>
       </header>
 
+      <nav class="tabs" aria-label="Secciones">
+        <button class="tab-button is-active" data-tab="receive" type="button">Recibir</button>
+        <button class="tab-button" data-tab="send" type="button">Enviar</button>
+        <button class="tab-button" data-tab="files" type="button">Archivos</button>
+      </nav>
+
       <main class="grid">
-        <section class="panel qr-panel">
-          <div class="panel-title">QR para abrir la página</div>
+        <section class="panel qr-panel tab-panel is-active" data-panel="receive">
+          <div class="panel-title">Recibir</div>
+          <p class="lead panel-lead">Escaneá este QR desde el celular para abrir la página de subida. Lo que envíes desde el móvil se guarda en la desktop.</p>
           <div class="qr-frame">
-            <img id="qr-image" alt="QR de conexión" />
+            <img id="receive-qr-image" alt="QR para recibir archivos" />
           </div>
           <div class="meta">
-            <span>IP</span>
-            <strong id="ip-value">-</strong>
+            <span>URL</span>
+            <strong id="receive-url">-</strong>
           </div>
-          <div class="meta">
-            <span>Puerto</span>
-            <strong id="port-value">-</strong>
+          <div class="steps">
+            <div class="step">1. Escaneá el QR desde el celular.</div>
+            <div class="step">2. Elegí archivos o una carpeta en el móvil.</div>
+            <div class="step">3. Los archivos se descargarán en la desktop.</div>
           </div>
         </section>
 
-        <section class="panel info-panel">
-          <div class="panel-title">Estado del servidor</div>
-          <div class="terminal-card">
-            <div class="terminal-line" id="server-url">Esperando datos...</div>
-            <div class="terminal-line muted" id="upload-url">Escaneá el QR y se abrirá esta URL en el celular.</div>
+        <section class="panel send-panel tab-panel" data-panel="send">
+          <div class="panel-title">Enviar</div>
+          <p class="lead panel-lead">Subí archivos o carpetas desde la desktop y compartilos con el celular. Este QR abre la página de descarga en el móvil.</p>
+          <div class="qr-frame">
+            <img id="send-qr-image" alt="QR para descargar archivos" />
           </div>
-          <div class="steps">
-            <div class="step">1. Abrí la cámara del celular o un lector QR.</div>
-            <div class="step">2. Escaneá el código.</div>
-            <div class="step">3. Subí un archivo en la página que abre.</div>
+          <div class="meta">
+            <span>URL</span>
+            <strong id="send-url">-</strong>
           </div>
+
+          <form id="desktop-upload-form" class="upload-form">
+            <div class="upload-actions">
+              <button id="pick-files-button" type="button">Elegir archivos</button>
+              <button id="pick-folder-button" type="button">Elegir carpeta</button>
+            </div>
+            <input id="desktop-upload-files-input" class="hidden-file-input" type="file" multiple />
+            <input id="desktop-upload-folder-input" class="hidden-file-input" type="file" webkitdirectory directory />
+            <button type="submit">Subir selección</button>
+          </form>
+
+          <div class="progress-shell">
+            <div class="progress-bar" aria-hidden="true"><span id="desktop-upload-progress-bar"></span></div>
+            <div id="desktop-upload-progress-text" class="progress-text">0%</div>
+          </div>
+
+          <div id="desktop-upload-success" class="success-box">Archivos subidos correctamente.</div>
+        </section>
+
+        <section class="panel files-panel tab-panel" data-panel="files">
+          <div class="panel-title">Archivos</div>
+          <div id="files-summary" class="files-summary">Todavía no hay archivos.</div>
+          <div id="files-list" class="files-list"></div>
         </section>
       </main>
     </div>

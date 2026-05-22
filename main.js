@@ -31,9 +31,16 @@ async function boot() {
 
   createWindow();
 
-  const qrUrl = serverHandle.baseUrl;
+  const receiveQrUrl = serverHandle.receiveUrl;
+  const sendQrUrl = serverHandle.sendUrl;
 
-  const qrCodeDataUrl = await QRCode.toDataURL(qrUrl, {
+  const receiveQrCodeDataUrl = await QRCode.toDataURL(receiveQrUrl, {
+    margin: 1,
+    width: 400,
+    errorCorrectionLevel: 'M',
+  });
+
+  const sendQrCodeDataUrl = await QRCode.toDataURL(sendQrUrl, {
     margin: 1,
     width: 400,
     errorCorrectionLevel: 'M',
@@ -44,9 +51,10 @@ async function boot() {
       ip: serverHandle.ip,
       port: serverHandle.port,
       baseUrl: serverHandle.baseUrl,
-      uploadUrl: serverHandle.uploadUrl,
-      qrUrl,
-      qrCodeDataUrl,
+      receiveUrl: serverHandle.receiveUrl,
+      sendUrl: serverHandle.sendUrl,
+      receiveQrCodeDataUrl,
+      sendQrCodeDataUrl,
     });
   });
 }
