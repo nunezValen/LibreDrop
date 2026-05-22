@@ -1,6 +1,6 @@
 const receiveQrImage = document.getElementById('receive-qr-image');
 const sendQrImage = document.getElementById('send-qr-image');
-const statusPill = document.getElementById('status-pill');
+const statusPill = document.getElementById('status-label');
 const receiveUrl = document.getElementById('receive-url');
 const sendUrl = document.getElementById('send-url');
 const filesSummary = document.getElementById('files-summary');
@@ -13,7 +13,7 @@ const pickFolderButton = document.getElementById('pick-folder-button');
 const desktopUploadProgressBar = document.getElementById('desktop-upload-progress-bar');
 const desktopUploadProgressText = document.getElementById('desktop-upload-progress-text');
 const desktopUploadSuccess = document.getElementById('desktop-upload-success');
-const tabButtons = Array.from(document.querySelectorAll('.tab-button'));
+const tabButtons = Array.from(document.querySelectorAll('.nav-item'));
 const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
 
 let currentBaseUrl = null;
@@ -163,7 +163,7 @@ function startPolling() {
 }
 
 for (const button of tabButtons) {
-  button.addEventListener('click', () => setActiveTab(button.dataset.tab));
+  if (button) button.addEventListener('click', () => setActiveTab(button.dataset.tab));
 }
 
 pickFilesButton.addEventListener('click', () => desktopUploadFilesInput.click());
@@ -177,12 +177,14 @@ desktopUploadFolderInput.addEventListener('change', () => {
   uploadDesktopFiles(desktopUploadFolderInput.files, desktopUploadFolderInput);
 });
 
-desktopUploadForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  const selectedFiles = desktopUploadFilesInput.files.length > 0 ? desktopUploadFilesInput.files : desktopUploadFolderInput.files;
-  const sourceInput = desktopUploadFilesInput.files.length > 0 ? desktopUploadFilesInput : desktopUploadFolderInput;
-  uploadDesktopFiles(selectedFiles, sourceInput);
-});
+if (desktopUploadForm) {
+  desktopUploadForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const selectedFiles = desktopUploadFilesInput.files.length > 0 ? desktopUploadFilesInput.files : desktopUploadFolderInput.files;
+    const sourceInput = desktopUploadFilesInput.files.length > 0 ? desktopUploadFilesInput : desktopUploadFolderInput;
+    uploadDesktopFiles(selectedFiles, sourceInput);
+  });
+}
 
 window.libredrop.onServerState((state) => {
   currentBaseUrl = state.baseUrl;
