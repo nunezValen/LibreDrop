@@ -97,229 +97,574 @@ function renderReceivePage(baseUrl) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LibreDrop - Recibir</title>
+    <title>LibreDrop — Recibir</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
     <style>
       :root {
+        --bg:       #0b1a10;
+        --bg-2:     #0f2016;
+        --bg-3:     #142a1a;
+        --s1:       rgba(17, 34, 22, 0.92);
+        --s2:       rgba(22, 44, 28, 0.97);
+        --tx:       #e8f5ec;
+        --tx2:      #8db89a;
+        --tx3:      #527a5e;
+        --bd:       rgba(61, 138, 80, 0.18);
+        --bd2:      rgba(61, 138, 80, 0.32);
+        --ac:       #3aab5c;
+        --ac-glow:  rgba(58, 171, 92, 0.24);
+        --r-sm:     8px;
+        --r-md:     14px;
+        --r-lg:     20px;
+        --r-xl:     26px;
         color-scheme: dark;
-        --bg: #08111f;
-        --panel: #101a31;
-        --panel-2: #17213b;
-        --text: #f3f7ff;
-        --muted: #9aa8c7;
-        --accent: #6ee7ff;
-        --accent-2: #8b5cf6;
-        --border: rgba(255, 255, 255, 0.08);
       }
-      * { box-sizing: border-box; }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
       body {
-        margin: 0;
+        font-family: 'DM Sans', system-ui, sans-serif;
+        background: var(--bg);
+        background-image:
+          radial-gradient(ellipse 70% 40% at 50% 0%, rgba(58, 171, 92, 0.1) 0%, transparent 60%),
+          radial-gradient(ellipse 40% 30% at 90% 100%, rgba(34, 138, 66, 0.06) 0%, transparent 50%);
+        color: var(--tx);
         min-height: 100vh;
         display: grid;
         place-items: center;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        background:
-          radial-gradient(circle at top, rgba(110, 231, 255, 0.15), transparent 25%),
-          radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.16), transparent 30%),
-          var(--bg);
-        color: var(--text);
-        padding: 24px;
+        padding: 24px 16px;
       }
+
       .card {
-        width: min(560px, 100%);
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-        border: 1px solid var(--border);
-        border-radius: 24px;
-        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+        width: min(480px, 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        background: var(--s1);
+        border: 1px solid var(--bd);
+        border-radius: var(--r-xl);
         overflow: hidden;
       }
-      .hero {
-        padding: 24px 24px 18px;
-        background: linear-gradient(135deg, rgba(110, 231, 255, 0.12), rgba(139, 92, 246, 0.12));
-        border-bottom: 1px solid var(--border);
+
+      /* Header */
+      .card-header {
+        padding: 24px 24px 20px;
+        border-bottom: 1px solid var(--bd);
+        display: flex;
+        align-items: center;
+        gap: 14px;
       }
-      h1 {
-        margin: 0 0 8px;
-        font-size: 30px;
+
+      .logo-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #196b33, #0b3319);
+        display: grid;
+        place-items: center;
+        color: #a8e0b7;
+        flex-shrink: 0;
+        box-shadow: 0 2px 14px rgba(58, 171, 92, 0.28);
+      }
+
+      .header-text h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: 20px;
+        font-weight: 800;
         letter-spacing: -0.03em;
+        color: var(--tx);
+        line-height: 1;
       }
-      p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.5;
+
+      .header-text p {
+        font-size: 13px;
+        color: var(--tx2);
+        margin-top: 4px;
+        line-height: 1.4;
       }
-      .content {
-        padding: 24px;
-        display: grid;
-        gap: 18px;
+
+      .status-badge {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 99px;
+        background: rgba(58, 171, 92, 0.1);
+        border: 1px solid var(--bd2);
+        font-size: 11px;
+        font-family: 'DM Mono', monospace;
+        color: #6dca87;
+        flex-shrink: 0;
       }
-      .box {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 16px;
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--ac);
+        box-shadow: 0 0 8px var(--ac);
+        animation: pulse 2.4s ease-in-out infinite;
       }
-      .label {
-        font-size: 12px;
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+
+      /* Body */
+      .card-body {
+        padding: 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* Endpoint row */
+      .endpoint-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: var(--s2);
+        border: 1px solid var(--bd);
+        border-radius: var(--r-md);
+      }
+
+      .endpoint-label {
+        font-family: 'DM Mono', monospace;
+        font-size: 10px;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--muted);
-        margin-bottom: 8px;
+        letter-spacing: 0.14em;
+        color: var(--tx3);
+        flex-shrink: 0;
       }
-      code {
-        display: block;
-        padding: 14px;
+
+      .endpoint-url {
+        font-family: 'DM Mono', monospace;
+        font-size: 12px;
+        color: var(--ac);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+      }
+
+      /* Drop zone */
+      .drop-zone {
+        border: 1.5px dashed var(--bd2);
+        border-radius: var(--r-lg);
+        background: rgba(58, 171, 92, 0.03);
+        transition: all 0.15s ease;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .drop-zone.is-over {
+        border-color: var(--ac);
+        background: rgba(58, 171, 92, 0.08);
+      }
+
+      .drop-zone.has-files {
+        border-color: var(--bd2);
+        border-style: solid;
+      }
+
+      .drop-inner {
+        padding: 32px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+      }
+
+      .drop-icon {
+        width: 48px;
+        height: 48px;
         border-radius: 14px;
-        background: var(--panel-2);
-        color: var(--accent);
-        word-break: break-all;
-      }
-      form {
+        background: rgba(58, 171, 92, 0.1);
+        border: 1px solid var(--bd);
         display: grid;
+        place-items: center;
+        color: var(--ac);
+        margin-bottom: 4px;
+      }
+
+      .drop-title {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--tx);
+      }
+
+      .drop-sub {
+        font-size: 13px;
+        color: var(--tx2);
+        margin-bottom: 4px;
+      }
+
+      .drop-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      /* File list inside drop zone */
+      .file-list {
+        padding: 0 16px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .file-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        background: var(--s2);
+        border: 1px solid var(--bd);
+        border-radius: var(--r-sm);
+      }
+
+      .file-row svg { color: var(--ac); flex-shrink: 0; }
+      .file-row-name { font-size: 13px; color: var(--tx); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+      .file-row-size { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--tx3); flex-shrink: 0; }
+
+      /* Buttons */
+      .btn {
+        appearance: none;
+        border: none;
+        border-radius: var(--r-md);
+        padding: 10px 16px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        transition: all 0.14s ease;
+        white-space: nowrap;
+      }
+
+      .btn--ghost {
+        background: var(--s2);
+        border: 1px solid var(--bd2);
+        color: var(--tx2);
+        font-size: 13px;
+        padding: 8px 14px;
+      }
+
+      .btn--ghost:hover {
+        background: rgba(58, 171, 92, 0.1);
+        border-color: var(--ac);
+        color: var(--tx);
+      }
+
+      .btn--primary {
+        background: var(--ac);
+        color: #06200f;
+        font-weight: 600;
+        width: 100%;
+        padding: 14px;
+        font-size: 15px;
+        border-radius: var(--r-lg);
+      }
+
+      .btn--primary:hover {
+        filter: brightness(1.08);
+        box-shadow: 0 0 22px var(--ac-glow);
+      }
+
+      .btn--primary:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+        box-shadow: none;
+        filter: none;
+      }
+
+      /* Hidden file input */
+      #upload-input { display: none; }
+
+      /* Progress */
+      .progress-wrap {
+        display: flex;
+        align-items: center;
         gap: 12px;
       }
-      input[type='file'] {
-        width: 100%;
-        color: var(--muted);
-      }
-      .progress-shell {
-        display: grid;
-        gap: 8px;
-      }
-      .progress-bar {
-        width: 100%;
-        height: 12px;
-        border-radius: 999px;
+
+      .progress-track {
+        flex: 1;
+        height: 4px;
+        background: var(--bd);
+        border-radius: 99px;
         overflow: hidden;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid var(--border);
       }
-      .progress-bar > span {
+
+      #upload-progress-bar {
         display: block;
-        width: 0%;
         height: 100%;
+        width: 0%;
+        background: var(--ac);
         border-radius: inherit;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
         transition: width 120ms linear;
+        box-shadow: 0 0 8px rgba(58, 171, 92, 0.6);
       }
-      .progress-text {
-        color: var(--muted);
-        font-size: 14px;
+
+      .progress-pct {
+        font-family: 'DM Mono', monospace;
+        font-size: 12px;
+        color: var(--tx2);
+        min-width: 38px;
+        text-align: right;
       }
-      .success-box {
+
+      /* Success */
+      .toast-success {
         display: none;
+        align-items: center;
+        gap: 8px;
         padding: 12px 14px;
-        border-radius: 14px;
-        background: rgba(126, 241, 178, 0.12);
-        border: 1px solid rgba(126, 241, 178, 0.24);
-        color: #bff8d9;
+        border-radius: var(--r-md);
+        background: rgba(58, 171, 92, 0.12);
+        border: 1px solid rgba(58, 171, 92, 0.3);
+        color: #a8e0b7;
         font-size: 14px;
       }
-      .success-box.is-visible {
-        display: block;
+
+      .toast-success.is-visible { display: flex; }
+
+      /* Note */
+      .note {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        font-size: 12px;
+        color: var(--tx3);
+        line-height: 1.5;
+        padding: 10px 14px;
+        background: var(--s2);
+        border-radius: var(--r-sm);
+        border: 1px solid var(--bd);
       }
-      button {
-        appearance: none;
-        border: 0;
-        border-radius: 14px;
-        padding: 14px 18px;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        color: white;
-        font-weight: 700;
-        cursor: pointer;
-      }
-      button:hover { filter: brightness(1.05); }
-      .hint { font-size: 14px; color: var(--muted); }
-      .status-ok { color: #7ef1b2; }
-      .files-note {
-        font-size: 13px;
-        color: var(--muted);
-        margin-top: 8px;
-      }
+
+      .note svg { flex-shrink: 0; margin-top: 1px; }
     </style>
   </head>
   <body>
     <main class="card">
-      <section class="hero">
-        <h1>LibreDrop</h1>
-        <p>Servidor local listo para recibir archivos en la misma red.</p>
-      </section>
-      <section class="content">
-        <div class="box">
-          <div class="label">Endpoint</div>
-          <code>${baseUrl}/upload</code>
+
+      <header class="card-header">
+        <div class="logo-mark">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L17 6v8l-7 4-7-4V6l7-4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+            <path d="M10 6v6M7 8l3-2 3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <div class="box">
-          <div class="label">Prueba rápida</div>
-          <form id="upload-form" action="${baseUrl}/upload" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="direction" value="receive" />
-            <input id="upload-input" type="file" name="files" multiple webkitdirectory directory required />
-            <button type="submit">Subir archivo</button>
-          </form>
-          <div class="progress-shell">
-            <div class="progress-bar" aria-hidden="true"><span id="upload-progress-bar"></span></div>
-            <div id="upload-progress-text" class="progress-text">0%</div>
+        <div class="header-text">
+          <h1>LibreDrop</h1>
+          <p>Servidor local en la red</p>
+        </div>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Activo
+        </div>
+      </header>
+
+      <div class="card-body">
+
+        <div class="endpoint-row">
+          <span class="endpoint-label">Endpoint</span>
+          <span class="endpoint-url">${baseUrl}/upload</span>
+        </div>
+
+        <div class="drop-zone" id="drop-zone">
+          <div class="drop-inner" id="drop-inner">
+            <div class="drop-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 4v14M6 10l6-6 6 6M4 20h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="drop-title">Arrastrá archivos aquí</p>
+            <p class="drop-sub">o elegí desde el dispositivo</p>
+            <div class="drop-actions">
+              <button class="btn btn--ghost" id="pick-files-btn" type="button">Archivos</button>
+              <button class="btn btn--ghost" id="pick-folder-btn" type="button">Carpeta</button>
+            </div>
           </div>
-          <div id="upload-success" class="success-box">Archivos subidos correctamente.</div>
-          <div class="files-note">También podés elegir una carpeta completa desde esta página. Cada archivo se guarda por separado.</div>
+          <div class="file-list" id="file-list"></div>
         </div>
-        <div class="hint status-ok">Si llegaste aquí desde el QR, la conexión está funcionando.</div>
-      </section>
-      <script>
-        (function () {
-          const form = document.getElementById('upload-form');
-          const input = document.getElementById('upload-input');
-          const progressBar = document.getElementById('upload-progress-bar');
-          const progressText = document.getElementById('upload-progress-text');
-          const successBox = document.getElementById('upload-success');
 
-          function setProgress(percent) {
-            const value = Math.max(0, Math.min(100, percent));
-            progressBar.style.width = value + '%';
-            progressText.textContent = value === 100 ? '100%' : value.toFixed(0) + '%';
-          }
+        <input id="upload-input" type="file" name="files" multiple />
+        <input id="upload-folder-input" type="file" name="files" multiple webkitdirectory directory style="display:none" />
 
-          form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            successBox.classList.remove('is-visible');
+        <button class="btn btn--primary" id="submit-btn" type="button" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2v10M4 6l4-4 4 4M2 14h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Subir archivos
+        </button>
 
-            if (!input.files || input.files.length === 0) {
-              return;
-            }
+        <div class="progress-wrap" id="progress-wrap" style="display:none">
+          <div class="progress-track">
+            <span id="upload-progress-bar"></span>
+          </div>
+          <span class="progress-pct" id="upload-progress-text">0%</span>
+        </div>
 
-            const data = new FormData();
-            data.append('direction', 'receive');
-            Array.from(input.files).forEach(function (file) {
-              data.append('files', file, file.webkitRelativePath || file.name);
-            });
+        <div class="toast-success" id="upload-success">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Archivos subidos correctamente.
+        </div>
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '${baseUrl}/upload');
+        <div class="note">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6.5 5.5v4M6.5 3.5v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          También podés elegir una carpeta completa. Cada archivo se guarda por separado en la desktop.
+        </div>
 
-            xhr.upload.addEventListener('progress', function (event) {
-              if (event.lengthComputable) {
-                setProgress((event.loaded / event.total) * 100);
-              }
-            });
-
-            xhr.addEventListener('load', function () {
-              if (xhr.status >= 200 && xhr.status < 300) {
-                setProgress(100);
-                successBox.classList.add('is-visible');
-                setTimeout(function () {
-                  setProgress(0);
-                }, 1200);
-              }
-            });
-
-            xhr.addEventListener('error', function () {
-              progressText.textContent = 'Error al subir';
-            });
-
-            xhr.send(data);
-          });
-        })();
-      </script>
+      </div>
     </main>
+
+    <script>
+      (function () {
+        const dropZone   = document.getElementById('drop-zone');
+        const dropInner  = document.getElementById('drop-inner');
+        const fileList   = document.getElementById('file-list');
+        const input      = document.getElementById('upload-input');
+        const folderInput = document.getElementById('upload-folder-input');
+        const pickFiles  = document.getElementById('pick-files-btn');
+        const pickFolder = document.getElementById('pick-folder-btn');
+        const submitBtn  = document.getElementById('submit-btn');
+        const progressWrap = document.getElementById('progress-wrap');
+        const progressBar  = document.getElementById('upload-progress-bar');
+        const progressText = document.getElementById('upload-progress-text');
+        const successBox   = document.getElementById('upload-success');
+
+        let selectedFiles = [];
+
+        function formatSize(bytes) {
+          if (bytes < 1024) return bytes + ' B';
+          if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+          return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function renderFiles() {
+          fileList.innerHTML = '';
+          if (selectedFiles.length === 0) {
+            dropInner.style.display = '';
+            dropZone.classList.remove('has-files');
+            submitBtn.disabled = true;
+            return;
+          }
+          dropInner.style.display = 'none';
+          dropZone.classList.add('has-files');
+          submitBtn.disabled = false;
+
+          selectedFiles.forEach(function (f) {
+            const row = document.createElement('div');
+            row.className = 'file-row';
+            row.innerHTML = [
+              '<svg width="14" height="14" viewBox="0 0 14 14" fill="none">',
+              '  <path d="M3 2a1 1 0 0 1 1-1h4l3 3v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>',
+              '</svg>',
+              '<span class="file-row-name">' + f.name + '</span>',
+              '<span class="file-row-size">' + formatSize(f.size) + '</span>',
+            ].join('');
+            fileList.appendChild(row);
+          });
+        }
+
+        function setFiles(files) {
+          selectedFiles = Array.from(files);
+          renderFiles();
+        }
+
+        pickFiles.addEventListener('click', function () { input.click(); });
+        pickFolder.addEventListener('click', function () { folderInput.click(); });
+
+        input.addEventListener('change', function () {
+          if (input.files.length) setFiles(input.files);
+        });
+
+        folderInput.addEventListener('change', function () {
+          if (folderInput.files.length) setFiles(folderInput.files);
+        });
+
+        dropZone.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          dropZone.classList.add('is-over');
+        });
+
+        dropZone.addEventListener('dragleave', function () {
+          dropZone.classList.remove('is-over');
+        });
+
+        dropZone.addEventListener('drop', function (e) {
+          e.preventDefault();
+          dropZone.classList.remove('is-over');
+          if (e.dataTransfer.files.length) setFiles(e.dataTransfer.files);
+        });
+
+        function setProgress(percent) {
+          const v = Math.max(0, Math.min(100, percent));
+          progressBar.style.width = v + '%';
+          progressText.textContent = v === 100 ? '100%' : v.toFixed(0) + '%';
+        }
+
+        submitBtn.addEventListener('click', function () {
+          if (!selectedFiles.length) return;
+
+          successBox.classList.remove('is-visible');
+          progressWrap.style.display = 'flex';
+          setProgress(0);
+          submitBtn.disabled = true;
+
+          const data = new FormData();
+          data.append('direction', 'receive');
+          selectedFiles.forEach(function (f) {
+            data.append('files', f, f.webkitRelativePath || f.name);
+          });
+
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '${baseUrl}/upload');
+
+          xhr.upload.addEventListener('progress', function (e) {
+            if (e.lengthComputable) setProgress((e.loaded / e.total) * 100);
+          });
+
+          xhr.addEventListener('load', function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              setProgress(100);
+              successBox.classList.add('is-visible');
+              setTimeout(function () {
+                progressWrap.style.display = 'none';
+                setProgress(0);
+                selectedFiles = [];
+                renderFiles();
+                submitBtn.disabled = true;
+              }, 2000);
+            }
+          });
+
+          xhr.addEventListener('error', function () {
+            progressText.textContent = 'Error al subir';
+            submitBtn.disabled = false;
+          });
+
+          xhr.send(data);
+        });
+      })();
+    </script>
   </body>
 </html>`;
 }
