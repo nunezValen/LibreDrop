@@ -1,17 +1,35 @@
 const path = require('path');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, nativeImage, screen } = require('electron');
 const QRCode = require('qrcode');
 const { startServer } = require('./server');
 
 let mainWindow;
 let serverHandle;
 
+const appIconPath = path.join(__dirname, 'logo libredrop.png');
+
+function getWindowBounds() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  const windowWidth = Math.max(960, Math.round(width * 0.7));
+  const windowHeight = Math.max(760, Math.round(height * 0.86));
+
+  return {
+    width: Math.min(windowWidth, width),
+    height: Math.min(windowHeight, height),
+  };
+}
+
 function createWindow() {
+  const icon = nativeImage.createFromPath(appIconPath);
+
   mainWindow = new BrowserWindow({
-    width: 520,
-    height: 760,
+    ...getWindowBounds(),
     backgroundColor: '#0b1020',
     title: 'LibreDrop',
+    icon,
+    center: true,
+    minWidth: 960,
+    minHeight: 720,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -27,6 +45,7 @@ function createWindow() {
 }
 
 async function boot() {
+  app.setAppUserModelId('com.libredrop.desktop');
   serverHandle = await startServer();
 
   createWindow();

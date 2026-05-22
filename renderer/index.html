@@ -188,11 +188,35 @@
             <div id="files-summary" class="files-count">—</div>
           </div>
 
-          <div id="files-list" class="files-grid"></div>
-          <div id="files-empty" class="files-empty">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M10 12a4 4 0 0 1 4-4h10l6 6h8a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-            <p>Todavía no hay archivos recibidos.</p>
-            <p class="files-empty-sub">Usá la pestaña Recibir para transferir desde el celular.</p>
+          <div class="files-layout">
+            <div class="files-list-column">
+              <div id="files-list" class="files-grid"></div>
+              <div id="files-empty" class="files-empty">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M10 12a4 4 0 0 1 4-4h10l6 6h8a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <p>Todavía no hay archivos recibidos.</p>
+                <p class="files-empty-sub">Usá la pestaña Recibir para transferir desde el celular.</p>
+              </div>
+            </div>
+
+            <aside class="files-preview" id="file-preview-panel">
+              <div class="files-preview-header">
+                <div>
+                  <p class="files-preview-eyebrow">Vista previa</p>
+                  <h3 class="files-preview-title" id="file-preview-title">Elegí un archivo</h3>
+                </div>
+                <span class="files-preview-badge" id="file-preview-badge">—</span>
+              </div>
+
+              <div class="files-preview-media" id="file-preview-media">
+                <div class="files-preview-placeholder">
+                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M12 14a4 4 0 0 1 4-4h14l8 8h6a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V14Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M22 32l5-6 6 7 4-4 5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="22" r="2" fill="currentColor"/></svg>
+                  <p>Seleccioná un archivo para verlo acá.</p>
+                </div>
+              </div>
+
+              <div class="files-preview-meta" id="file-preview-meta"></div>
+              <div class="files-preview-actions" id="file-preview-actions"></div>
+            </aside>
           </div>
         </section>
 
