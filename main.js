@@ -46,7 +46,7 @@ function createWindow() {
 
 async function boot() {
   app.setAppUserModelId('com.libredrop.desktop');
-  serverHandle = await startServer();
+  serverHandle = await startServer({ storageRoot: app.getPath('userData') });
 
   createWindow();
 

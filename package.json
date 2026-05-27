@@ -5,7 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "electron ."
+    "dev": "electron .",
+    "make-icon": "node ./scripts/make-icon.js",
+    "package-dir": "npm run make-icon && electron-builder --win dir --x64",
+    "dist": "npm run make-icon && electron-builder --win nsis --x64"
   },
   "keywords": [
     "electron",
@@ -17,9 +20,31 @@
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
-    "electron": "^39.8.1",
     "express": "^4.21.2",
     "multer": "^2.0.2",
     "qrcode": "^1.5.4"
+  },
+  "build": {
+    "appId": "com.libredrop.app",
+    "productName": "LibreDrop",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icons/app.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icons/app.ico",
+      "uninstallerIcon": "build/icons/app.ico"
+    }
+  },
+  "devDependencies": {
+    "electron-builder": "^26.8.1",
+    "png-to-ico": "^1.0.0",
+    "electron": "^39.8.1"
   }
 }

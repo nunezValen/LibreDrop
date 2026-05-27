@@ -9,22 +9,70 @@ const QRCode = require('qrcode');
 
 function getLocalIP() {
   const interfaces = os.networkInterfaces();
+  const candidates = [];
+
+  function isPrivateIPv4(address) {
+    const parts = address.split('.').map(Number);
+
+    if (parts.length !== 4 || parts.some((part) => Number.isNaN(part))) {
+      return false;
+    }
+
+    const [first, second] = parts;
+
+    return (
+      first === 10 ||
+      (first === 172 && second >= 16 && second <= 31) ||
+      (first === 192 && second === 168)
+    );
+  }
+
+  function scoreInterfaceName(interfaceName) {
+    const lowerName = interfaceName.toLowerCase();
+    let score = 0;
+
+    if (/^(ethernet|wi-?fi|wlan|lan)\b/.test(lowerName) || /\b(ethernet|wi-?fi|wlan|lan)\b/.test(lowerName)) {
+      score += 40;
+    }
+
+    if (/\b(en\d*|eth\d*|enp\d*|ens\d*|eno\d*)\b/.test(lowerName)) {
+      score += 30;
+    }
+
+    if (/\b(vethernet|virtual|vmware|vbox|docker|hyper-v|hyperv|hamachi|vpn|tap|tunnel|loopback|bluetooth|teredo|isatap|wintun|wireguard|tailscale)\b/.test(lowerName)) {
+      score -= 50;
+    }
+
+    return score;
+  }
 
   for (const interfaceName of Object.keys(interfaces)) {
     const entries = interfaces[interfaceName] || [];
 
     for (const entry of entries) {
       if (entry.family === 'IPv4' && !entry.internal) {
-        return entry.address;
+        if (entry.address.startsWith('169.254.')) {
+          continue;
+        }
+
+        candidates.push({
+          address: entry.address,
+          score: scoreInterfaceName(interfaceName) + (isPrivateIPv4(entry.address) ? 20 : 0),
+        });
       }
     }
+  }
+
+  if (candidates.length > 0) {
+    candidates.sort((left, right) => right.score - left.score);
+    return candidates[0].address;
   }
 
   return '127.0.0.1';
 }
 
-function ensureUploadsDir() {
-  const uploadsDir = path.join(__dirname, 'uploads');
+function ensureUploadsDir(storageRoot) {
+  const uploadsDir = path.join(storageRoot, 'uploads');
 
   if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
@@ -33,12 +81,12 @@ function ensureUploadsDir() {
   return uploadsDir;
 }
 
-function getManifestPath() {
-  return path.join(ensureUploadsDir(), 'files.json');
+function getManifestPath(storageRoot) {
+  return path.join(ensureUploadsDir(storageRoot), 'files.json');
 }
 
-function loadFileIndex() {
-  const manifestPath = getManifestPath();
+function loadFileIndex(storageRoot) {
+  const manifestPath = getManifestPath(storageRoot);
 
   if (!fs.existsSync(manifestPath)) {
     return [];
@@ -55,8 +103,8 @@ function loadFileIndex() {
   }
 }
 
-function saveFileIndex(files) {
-  fs.writeFileSync(getManifestPath(), JSON.stringify(files, null, 2), 'utf8');
+function saveFileIndex(files, storageRoot) {
+  fs.writeFileSync(getManifestPath(storageRoot), JSON.stringify(files, null, 2), 'utf8');
 }
 
 function formatBytes(bytes) {
@@ -1056,10 +1104,11 @@ function renderSendPage(baseUrl, files) {
 </html>`;
 }
 
-async function startServer() {
+async function startServer(options = {}) {
   const app = express();
-  const uploadsDir = ensureUploadsDir();
-  const fileIndex = loadFileIndex();
+  const storageRoot = options.storageRoot || __dirname;
+  const uploadsDir = ensureUploadsDir(storageRoot);
+  const fileIndex = loadFileIndex(storageRoot);
   const storage = multer.diskStorage({
     destination: uploadsDir,
     filename: (req, file, callback) => {
@@ -1143,7 +1192,7 @@ async function startServer() {
 
     const newRecords = receivedFiles.map((file) => createFileRecord(file, direction));
     fileIndex.push(...newRecords);
-    saveFileIndex(fileIndex);
+    saveFileIndex(fileIndex, storageRoot);
 
     for (const file of receivedFiles) {
       console.log(`Archivo recibido: ${file.originalname}`);
